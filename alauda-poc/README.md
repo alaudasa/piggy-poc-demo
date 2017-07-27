@@ -39,3 +39,30 @@ find ./ -name "alaudaci.yml"    \
 #### 运行项目
 
 在灵雀云平台中，通过生成的应用模版直接创建应用即可。
+
+### 附：脚本修改并提交到Gitlab的Shell脚本
+
+针对*installgitlabv2*部署包部署的gitlab。
+
+```shell
+private_token=$(
+curl -s -L -X POST \
+"http://localhost:9999/api/v3/session?login=root&password=alauda1234" |\
+grep -Po '(?<="private_token":")[^"]*'
+)
+PUSH::piggymetrics() {
+    #create_project
+    curl --header "PRIVATE-TOKEN: $private_token" -X POST \
+         "http://localhost:9999/api/v3/projects?name=piggymetrics&description='Microservice%20Architecture%20with%20Spring%20Boot,%20Spring%20Cloud%20and%20Docker%20http://my-piggymetrics.rhcloud.com/'&public=true"
+    #push
+    cd /opt
+    git clone ssh://git@localhost:10022/root/piggymetrics.git
+    cd /opt/piggymetrics
+    \cp -ar /srcpush/piggymetrics/* ./
+    git add *
+    git commit -a -m"`date`" > /dev/null
+    git push origin master > /dev/null
+}
+PUSH::piggymetrics
+```
+

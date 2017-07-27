@@ -51,5 +51,5 @@ find ./ -name "alaudaci.yml"	\
 bash ${SHPATH}/script/create_build_cfg.bash
 #
 cd ${SHPATH}
-docker run --net=host --rm  -v `pwd`/srcpush/:/srcpush git_push /srcpush/push.bash pm
+#docker run --net=host --rm  -v `pwd`/srcpush/:/srcpush git_push /srcpush/push.bash pm
 
