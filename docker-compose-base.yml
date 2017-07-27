@@ -1,0 +1,67 @@
+version: '2'
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    restart: always
+    ports:
+      - 15672:15672
+      - 5672:5672
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "10"
+
+  config:
+    build: config
+    image: sqshq/piggymetrics-config
+    environment:
+      CONFIG_SERVICE_PASSWORD: admin
+    restart: always
+    ports:
+      - 8888:8888
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "10"
+
+  registry:
+    build: registry
+    image: sqshq/piggymetrics-registry
+    environment:
+      CONFIG_SERVICE_PASSWORD: admin
+    restart: always
+    depends_on: [config]
+    ports:
+      - 8761:8761
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "10"
+
+  gateway:
+    environment:
+      CONFIG_SERVICE_PASSWORD: admin
+    build: gateway
+    image: sqshq/piggymetrics-gateway
+    restart: always
+    depends_on: [config]
+    ports:
+      - 80:4000
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "10"
+  data-mongodb:
+    environment:
+      INIT_DUMP: account-service-dump.js
+      MONGODB_PASSWORD: admin
+    build: mongodb
+    image: sqshq/piggymetrics-mongodb
+    restart: always
+    ports:
+      - 25000:27017
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "10"
+

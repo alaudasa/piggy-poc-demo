@@ -1,0 +1,79 @@
+version: '2'
+services:
+  auth-service:
+    environment:
+      CONFIG_SERVICE_PASSWORD: admin
+      NOTIFICATION_SERVICE_PASSWORD: admin
+      STATISTICS_SERVICE_PASSWORD: admin
+      ACCOUNT_SERVICE_PASSWORD: admin
+      MONGODB_PASSWORD: admin
+    build: auth-service
+    image: sqshq/piggymetrics-auth-service
+    restart: always
+    ports:
+      - 5000:5000
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "10"
+
+  account-service:
+    environment:
+      CONFIG_SERVICE_PASSWORD: admin
+      ACCOUNT_SERVICE_PASSWORD: admin
+      MONGODB_PASSWORD: admin
+    build: account-service
+    image: sqshq/piggymetrics-account-service
+    restart: always
+    # ports:
+    #   - 6000:6000
+    expose: 
+     - 6000
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "10"
+
+  statistics-service:
+    environment:
+      CONFIG_SERVICE_PASSWORD: admin
+      MONGODB_PASSWORD: admin
+      STATISTICS_SERVICE_PASSWORD: admin
+    build: statistics-service
+    image: sqshq/piggymetrics-statistics-service
+    restart: always
+    ports:
+      - 7000:7000
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "10"
+
+  notification-service:
+    environment:
+      CONFIG_SERVICE_PASSWORD: admin
+      MONGODB_PASSWORD: admin
+      NOTIFICATION_SERVICE_PASSWORD: admin
+    build: notification-service
+    image: sqshq/piggymetrics-notification-service
+    restart: always
+    ports:
+      - 8000:8000
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "10"
+
+  monitoring:
+    environment:
+      CONFIG_SERVICE_PASSWORD: admin
+    build: monitoring
+    image: sqshq/piggymetrics-monitoring
+    restart: always
+    ports:
+      - 9000:8080
+      - 8989:8989
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "10"

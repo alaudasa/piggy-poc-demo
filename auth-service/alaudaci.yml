@@ -1,0 +1,8 @@
+version: "0.1.0"
+pre_ci_boot:
+ image: 10.0.0.6:5000/alauda-poc/maven-ci
+ tag: "latest"
+ci:
+ - cd auth-service
+ - mvn -o package -Dmaven.test.skip=true
+ - cp -ar ../auth-service $ALAUDACI_DEST_DIR
