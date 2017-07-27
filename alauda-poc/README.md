@@ -6,9 +6,9 @@
 
 针对没有外部网络的私有环境，默认情况下，你需要部署gitlab，以及在自己的仓库中添加导入镜像：
 
-* java_8-jre              - 镜像地址：java:8-jre
+* java_8-jre              - 镜像地址：java:8-jre（docker hub）
 * maven                   - 镜像地址：index.alauda.cn/alaudaorg/maven-piggy
-* mongodb              - 镜像地址：mongo:3
+* mongodb              - 镜像地址：mongo:3 (docker hub)
 * rabbitmq_3           - 镜像地址：index.alauda.cn/alaudaorg/rabbitmq:3-management
 
 ### 修改Dockerfile和alaudaci.yaml
