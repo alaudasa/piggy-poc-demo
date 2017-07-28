@@ -24,6 +24,33 @@ find ./ -name "alaudaci.yml"    \
 -exec sed -i '/^\s\+image.*$/ s/\(\s\+image: \).*/\1'"<镜像仓库地址>\/alauda-poc\/maven-piggy"'/g' {} \;
 ```
 
+#### 生成的配置，以auth-service为例
+
+编译行为定义：*Dockerfile*
+
+```
+FROM 10.0.0.6:5000/alauda-poc/java:8-jre
+MAINTAINER Alexander Lukyanchikov <sqshq@sqshq.com>
+
+ADD ./target/auth-service.jar /app/
+CMD ["java", "-Xmx200m", "-jar", "/app/auth-service.jar"]
+
+EXPOSE 5000
+```
+
+构建行为定义：*alaudaci.yaml*
+
+```
+version: "0.1.0"
+pre_ci_boot:
+ image: 10.0.0.6:5000/alauda-poc/maven-piggy
+ tag: "latest"
+ci:
+ - cd auth-service
+ - mvn -o package -Dmaven.test.skip=true
+ - cp -ar ../auth-service $ALAUDACI_DEST_DIR
+```
+
 ### 创建构建项目
 
 你可以在灵雀云平台中手动创建这一系列服务的构建项目和相应的应用模版，然后构建出镜像，并运行完整的应用，脚本*create_build_cfg.bash*实现了自动批量创建构建项目，你可以修改*poc-cfg.sh*，然后执行piggymetrics.bash来调用，创建的服务包括：
